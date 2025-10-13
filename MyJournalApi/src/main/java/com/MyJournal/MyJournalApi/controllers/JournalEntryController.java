@@ -88,4 +88,8 @@ public class JournalEntryController {
         return journalEntryService.getJournalEntriesByDateRange(currentUser, startOfDay, endOfDay);
     }
 
+    // Endpoint för att redera ett journal inlägg
+
+    // Endpoint för att uppdatera ett inlägg
+
 }

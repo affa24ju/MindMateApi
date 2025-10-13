@@ -42,4 +42,8 @@ public class JournalEntryService {
         return journalEntryRepository.findByUserIdAndCreatedAtBetween(user.getId(), startDate, endDate);
     }
 
+    // Metod för att ta bort ett inlägg
+
+    // Metod för att uppdatera ett inlägg
+
 }
