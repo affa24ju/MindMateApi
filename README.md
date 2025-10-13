@@ -1,5 +1,5 @@
-## MyJournalApi
-This is the backend API for MyJournalFrontend application. 
+## MindMateApi
+This repository is clonned from MyJournalAPI to further development. That's why application name is MyJournalApi. This is the backend API for MindMateFrontend application. 
 
 ## Features
 **Authentication**
