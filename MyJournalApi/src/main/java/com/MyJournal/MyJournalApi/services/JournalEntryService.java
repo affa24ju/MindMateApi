@@ -66,9 +66,14 @@ public class JournalEntryService {
         if (!existingJournalEntry.getUserId().equals(user.getId())) {
             throw new RuntimeException("Du har inte behörighet att uppdatera den!");
         }
-        // Uppdaterar inlägg
-        existingJournalEntry.setNote(request.getNote());
-        existingJournalEntry.setFeeling(request.getFeeling());
+        // Uppdaterar endast fält som skickas med i request
+        if (request.getNote() != null) {
+            existingJournalEntry.setNote(request.getNote());
+        }
+        if (request.getFeeling() != null) {
+            existingJournalEntry.setFeeling(request.getFeeling());
+        }
+
         // existingJournalEntry.setUpdatedAt(LocalDateTime.now());
         return journalEntryRepository.save(existingJournalEntry);
     }

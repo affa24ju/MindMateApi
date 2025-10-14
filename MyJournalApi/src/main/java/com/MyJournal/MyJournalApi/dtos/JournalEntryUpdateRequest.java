@@ -1,6 +1,6 @@
 package com.MyJournal.MyJournalApi.dtos;
 
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
 
 import com.MyJournal.MyJournalApi.models.Feeling;
 
@@ -17,6 +17,6 @@ public class JournalEntryUpdateRequest {
     // Dto för att uppdatera inlägg
     private String note;
     private Feeling feeling;
-    private LocalDateTime updatedAt;
+    // private LocalDateTime updatedAt;
 
 }
