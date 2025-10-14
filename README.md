@@ -11,6 +11,7 @@ This repository is clonned from MyJournalAPI to further development. That's why 
 - Record daily mental condition with text descriptions
 - Save and manage daily entries
 - Delete en entry
+- Update en entry
 
 **History**
 - Endpoint to retrieve all current date entries
@@ -82,6 +83,8 @@ The application has the following endpoints:
 
 **DELETE:** localhost:8080/api/myJournal/deleteJournalEntry/{entryId}
 
+**PUT:** localhost:8080/api/myJournal/updateJournalEntry/{entryId}
+
 ## Ex. JSON
 **Create user/ Login**
 
@@ -97,7 +100,6 @@ The application has the following endpoints:
 **Note:** For Better experience use with frontend application! There you could find emojies and grahical representation of statistics.  
 
 ## Future Development:
-- Endpoint to update (pathc) journal entry
 - Endpoint to update username/ password
 - Add Admin role
 - Admin can delete an user account
