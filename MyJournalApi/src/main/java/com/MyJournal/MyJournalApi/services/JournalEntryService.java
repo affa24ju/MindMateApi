@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 //import org.springframework.format.annotation.DateTimeFormat;
 
 import com.MyJournal.MyJournalApi.dtos.JournalEntryRequest;
+import com.MyJournal.MyJournalApi.dtos.JournalEntryUpdateRequest;
 import com.MyJournal.MyJournalApi.models.JournalEntry;
 import com.MyJournal.MyJournalApi.models.User;
 import com.MyJournal.MyJournalApi.repositories.JournalEntryRepository;
@@ -57,5 +58,19 @@ public class JournalEntryService {
     }
 
     // Metod för att uppdatera ett inlägg
+    public JournalEntry updateJournalEntry(String entryId, JournalEntryUpdateRequest request, User user) {
+        // Hittar inlägg med entryId
+        JournalEntry existingJournalEntry = journalEntryRepository.findById(entryId)
+                .orElseThrow(() -> new RuntimeException("Inlägget med id: " + entryId + " hittades inte!"));
+        // Kontrollerar om inlägg tillhör den inloggade användaren
+        if (!existingJournalEntry.getUserId().equals(user.getId())) {
+            throw new RuntimeException("Du har inte behörighet att uppdatera den!");
+        }
+        // Uppdaterar inlägg
+        existingJournalEntry.setNote(request.getNote());
+        existingJournalEntry.setFeeling(request.getFeeling());
+        // existingJournalEntry.setUpdatedAt(LocalDateTime.now());
+        return journalEntryRepository.save(existingJournalEntry);
+    }
 
 }
