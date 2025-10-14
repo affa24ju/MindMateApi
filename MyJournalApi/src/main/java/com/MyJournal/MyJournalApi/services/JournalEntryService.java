@@ -43,6 +43,18 @@ public class JournalEntryService {
     }
 
     // Metod för att ta bort ett inlägg
+    public void deleteJournalEntry(String endtryId, User user) {
+        // Hittar & kontrollerar entry
+        JournalEntry existingEntry = journalEntryRepository.findById(endtryId)
+                .orElseThrow(() -> new RuntimeException("Inlägg med id: " + endtryId + " hittades inte!"));
+
+        // Kontrollerar om inlägg tillhör nuvarande användare
+        if (!existingEntry.getUserId().equals(user.getId())) {
+            throw new RuntimeException("Du är inte behörig att radera det här inlägg!");
+        }
+        journalEntryRepository.deleteById(endtryId);
+
+    }
 
     // Metod för att uppdatera ett inlägg
 
