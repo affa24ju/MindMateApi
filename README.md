@@ -21,12 +21,19 @@ This repository is clonned from MyJournalAPI to further development. That's why 
 - Endpoint to retrieve emotional pattern between two selected dates
 - Percentage breackdown of emotions (e.g. Glad: 40%, Sad:15%, Worried:20%...)
 
+**Ask AI**
+- Chat with Ai
+- Ask Ai for recipis to have a good meal
+- AI suggests receipes and says why it's good for healt
+- It can relate with previous conversation
+
 ## Architecture
 This is an API built with:
 - Java 21
 - Spring Boot
 - Maven
-- Spring Security (JWT authentication) 
+- Spring Security (JWT authentication)
+- OpenAI 
 - MongoDB database
 
 ## Frontend Integration
@@ -60,6 +67,9 @@ Please make sure that the application is running before you test with Postman.
 - Go to that endpoint you'd like to access
 - Select 'Bearer Token' under 'Authorization' and paste it in the given field
 
+**Chat with AI**
+Use Jwt token under Authoraziation- Bearer token. To ask a question use 'message' (only message, without '')key under Params and write your question in the value field. 
+
 ## Endpoints
 The application has the following endpoints:
 
@@ -84,6 +94,10 @@ The application has the following endpoints:
 **DELETE:** localhost:8080/api/myJournal/deleteJournalEntry/{entryId}
 
 **PUT:** localhost:8080/api/myJournal/updateJournalEntry/{entryId}
+
+**Chat with AI**
+
+**GET:** localhost:8080/api/myJournal/suggest-recipe
 
 ## Ex. JSON
 **Create user/ Login**
