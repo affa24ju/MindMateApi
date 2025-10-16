@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.MyJournal.MyJournalApi.models.User;
 import com.MyJournal.MyJournalApi.services.UserService;
 
 // import lombok.RequiredArgsConstructor;
@@ -44,6 +48,30 @@ public class AiRecipeController {
                 """;
 
         conversation.add(new SystemMessage(systemMessageString));
+    }
+
+    @GetMapping("/suggest-recipe")
+    public String suggestRecipe(
+            @RequestParam(name = "message", defaultValue = "Ge mig ett hälsosamt recept till middag") String message) {
+
+        // Hämtar inloggade användare via UserService
+        User currentUser = userService.getCurrentUser();
+        String username = currentUser.getUsername();
+
+        // Skapar användarens fråga till Ai
+        String userPrompt = String.format("Användaren %s frågar: %s", username, message);
+        Message userMessage = new UserMessage(userPrompt);
+        conversation.add(userMessage);
+
+        // Anropar OpenAi via Spring Ai
+        String aiResponse = chatClient.prompt()
+                .messages(conversation)
+                .call()
+                .content();
+
+        // Lägger till Ai svar i conversation med assistent, så den kommer ihåg
+        conversation.add(new AssistantMessage(aiResponse));
+        return aiResponse;
     }
 
 }
