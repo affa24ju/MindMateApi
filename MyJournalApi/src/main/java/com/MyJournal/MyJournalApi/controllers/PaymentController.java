@@ -35,8 +35,8 @@ public class PaymentController {
                 // Vid lyckad betalning, skicka användaren till premium-sidan
                 // på frontend, i premium-success-page visas ett tack-meddelande
                 .setSuccessUrl("http://localhost:4200/premium-success")
-                // Om användaren avbryter betalningen, skicka tillbaka till journal-sidan
-                .setCancelUrl("http://localhost:4200/journal")
+                // Om användaren avbryter betalningen, kommer till payment-cancel sidan
+                .setCancelUrl("http://localhost:4200/payment-cancel")
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
