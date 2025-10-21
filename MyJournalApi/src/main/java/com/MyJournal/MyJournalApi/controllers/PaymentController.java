@@ -3,7 +3,6 @@ package com.MyJournal.MyJournalApi.controllers;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,27 +27,35 @@ public class PaymentController {
     public ResponseEntity<Map<String, String>> createCheckoutSession() throws StripeException {
         Stripe.apiKey = stripeSecretKey;
 
+        // Kod från Stripe-dokumentation för att skapa en checkout session
+        // https://docs.stripe.com/payments/accept-a-payment
+        // Har justerat för att passa en prenumeration på premium
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:4200/payment-success")
-                .setCancelUrl("http://localhost:4200/payment-cancel")
+                // Vid lyckad betalning, skicka användaren till premium-sidan
+                // på frontend, i premium-success-page visas ett tack-meddelande
+                .setSuccessUrl("http://localhost:4200/premium-success")
+                // Om användaren avbryter betalningen, skicka tillbaka till journal-sidan
+                .setCancelUrl("http://localhost:4200/journal")
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
                                 .setPriceData(
                                         SessionCreateParams.LineItem.PriceData.builder()
                                                 .setCurrency("sek")
-                                                .setUnitAmount(500L) // Amount in cents
+                                                .setUnitAmount(2000L) // 20.00 SEK, i ören
                                                 .setProductData(
                                                         SessionCreateParams.LineItem.PriceData.ProductData
                                                                 .builder()
-                                                                .setName("MyJournal Premium Subscription")
+                                                                .setName("Premium Subscription")
                                                                 .build())
                                                 .build())
                                 .build())
                 .build();
 
         Session session = Session.create(params);
+        // Returnerar URL för Stripe-hosted checkout page, som frontend ska
+        // redirecta användaren till
         return ResponseEntity.ok(Map.of("url", session.getUrl()));
 
     }
