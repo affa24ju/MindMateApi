@@ -1,120 +1,159 @@
-## MindMateApi
-This repository is clonned from MyJournalAPI to further development. That's why application name is MyJournalApi. This is the backend API for MindMateFrontend application. 
+# MindMateApi
+Det här är en vidareutveckling av **MyJournalApi**, därför behåller applikationen namnet MyJournalApi. Detta är backend-API:t till frontendapplikationen **MindMateFrontend**.
 
-## Features
-**Authentication**
-- User registration and login system
-- Secure authentication flow with JWT token
-- Encrypted password
+API:t hanterar användarauthentisering, daglig journalföring samt en AI-funktion som kan föreslå goda råd relaterad till välmående och recept på hälsosamma kost. Med premium funktion får man tillgång till statistiken. 
 
-**Daily Journaling**
-- Record daily mental condition with text descriptions
-- Save and manage daily entries
-- Delete en entry
-- Update en entry
+## ✨ Funktioner
+**🔐Authentisering**
+- Registrering och inloggning av användare
+- Säker authenticering med **JWT-token**
+- Krypterad lösenord
 
-**History**
-- Endpoint to retrieve all current date entries
-- Endpoint to retrieve all entries (including today's)
+**📔Daglig journalföring**
+- Registrera dagligt mentalt tillstån med textbeskrivning
+- Spara och hantera dagliga inlägg
+- Uppdatera och ta bort inlägg
 
-**Statistics**
-- Endpoint to retrieve emotional pattern between two selected dates
-- Percentage breackdown of emotions (e.g. Glad: 40%, Sad:15%, Worried:20%...)
 
-**Ask AI**
-- Chat with Ai
-- Ask Ai for recipis to have a good meal
-- AI suggests receipes and says why it's good for healt
-- It can relate with previous conversation
+**📅Historik**
+- Hämta alla inlägg för dagens datum
+- Hämta alla tidigare inlägg
 
-## Architecture
-This is an API built with:
-- Java 21
-- Spring Boot
-- Maven
-- Spring Security (JWT authentication)
-- OpenAI 
-- MongoDB database
+**📊Statistik *(premium funktion)***
+- Hämta känslomönster mellan två valda datum
+- Prucentuell fördelning av känslor (e.g. Glad: 40%, Ledsen:15%, Orolig:20%...)
 
-## Frontend Integration
-The application has a seperate frontend service (https://github.com/affa24ju/MyJournalFrontend.git) built with:
+**🤖Fråga AI**
+- Chatta med AI
+- Be AI om förslag för hälsosamma livsstil eller receptförslag
+- Om man inte frågar något ger AI ett receptförslag för hälsosamma kost med kort förklaring varför recepten är bra för hälsan
+- AI kan referera till tidigare konversationer
+
+**💳Betalningstjänst**
+- Btalningstjäns från Stripe för att få tillgång till premium funktion
+- 
+## 🧩Arkitektur
+API:t är byggt med:
+- **Java 21**
+- **Spring Boot**
+- **Maven**
+- **Spring Security (JWT authentication)**
+- **Spring AI-OpenAI API**
+- **MongoDB-databas**
+- **Stripe**
+
+## 🖥️Frontend-integration
+Frontend applikation finns seperat här:
+
+  🔗(https://github.com/affa24ju/MyJournalFrontend.git) 
+
+Byggd med:
+
 - Angular
 - TypeScript
 
-## Getting started
-**Prerequisites**
-- Postman or any othe software, if you'd like to test endpoints without frontend
-- Clone and run frontend application to run the whole application. 
+## 🚀Kom igång
+**✅Förutsättningar**
+För att test API:t behöver du:
+- **Postman** (eller liknande verktyg) för att testa endpoints utan frontend
+- **Frontend-applikation** (om du vill köra hela systemet tillsammans)
 
-## Installation
-**Clone the repository**
+## 📥Installation
+**1. Klona projektet**
 ```bash
 git clone https://github.com/affa24ju/MyJournalApi.git
 ```
-Open the application with preffered code editor
+**2. Öppna projektet**
 
-**Run the application**
+Öppna repository i din favorit IDE(t.ex. VS Code, Intellij eller Eclipse)
 
-To run the application select MyJournalApiApplication.java file and click Run icon.
+**3. Skapa .env fil**
 
-## Testing with Postman
-Open Postman (or any other similar software) use endpoints. Please keep in mind that all endpoints needs to have authorization token (Exception: /register and /login).
-Please make sure that the application is running before you test with Postman.
+Skapa en .env fil med:
 
-**Add authorization token**
-- You will get an authorization token while you login with username and password
-- Copy this token
-- Go to that endpoint you'd like to access
-- Select 'Bearer Token' under 'Authorization' and paste it in the given field
+```bash
+OPEN_AI_API_KEY="yourOpenAiApiKey"
 
-**Chat with AI**
-Use Jwt token under Authoraziation- Bearer token. To ask a question use 'message' (only message, without '')key under Params and write your question in the value field. 
+STRIPE_SECRET_KEY="yourStripeSecretKey"
+```
 
-## Endpoints
-The application has the following endpoints:
+Spara filen.
 
-**Create user & login**
+**4. Kör applikationen**
 
-**POST:** localhost:8080/api/auth/register
+Starta applikationen genom att köra MyJournalApiApplication.java.
 
-**GET:** localhost:8080/api/auth/getUsers
+Obs! Om det visar fel meddelande i pom.xml fil, är det bara köra 'relod maven project'!
 
-**POST:** localhost:8080/api/auth/login
+## 🧪Testa med Postman
+Öppna **Postman** (liknande ett verktyg) för att testa API:t.
 
-**Journal entry & Statistics**
+**Observera** att de flesta endpoint kräver authentisering med JWT-token (undantag: `/register` och `/login`).
 
-**POST:** localhost:8080/api/myJournal/createJournalEntry
+**🔑Lägg till authentiseringstoken**
+1. Skapa en användare med användernamn och lösenord 
+2. Logga in med samma användarnamn och lösenord 
+3. Kopiera den token som returneras
+4. Gå till önskad endpoint
+5. Välj **Bearer Token** under *Authorization* och klirstra in din token
 
-**GET:** localhost:8080/api/myJournal/getAllEntries
+**💬Fråga AI**
 
-**GET:** localhost:8080/api/myJournal/today
+För att fråga AI:n:
+- Använd din JWT-token under *Authorization → Bearer Token*
+- Skicka en förfrågan till /suggest-recipe
+- Lägg till en parameter med nyckeln *message* och skriv din fråga som värde
+- Om du inte lägger till *message* parameter och skickar får du ett receptförslag som är bra för hälsa
 
-**GET:** localhost:8080/api/myJournal/getStats?startDate&endDate
+## 🔗API-endpoints
 
-**DELETE:** localhost:8080/api/myJournal/deleteJournalEntry/{entryId}
+### 👤Användare
 
-**PUT:** localhost:8080/api/myJournal/updateJournalEntry/{entryId}
+**POST** `localhost:8080/api/auth/register` -- Registrera användare
 
-**Chat with AI**
+**GET** `localhost:8080/api/auth/getUsers` -- Hämta alla användare
 
-**GET:** localhost:8080/api/myJournal/suggest-recipe
+**POST** `localhost:8080/api/auth/login` -- Logga in
+
+### 📔Journalinlägg & statistik
+
+**POST** `localhost:8080/api/myJournal/createJournalEntry` -- Skapa inlägg
+
+**GET** `localhost:8080/api/myJournal/getAllEntries` -- Hämta alla inlägg
+
+**GET** `localhost:8080/api/myJournal/today` -- Hämta dagens inlägg
+
+**GET** `localhost:8080/api/myJournal/getStats?startDate&endDate` -- Hämta statistik
+
+**DELETE** `localhost:8080/api/myJournal/deleteJournalEntry/{entryId}` -- Ta bort inlägg
+
+**PUT** `localhost:8080/api/myJournal/updateJournalEntry/{entryId}` -- Uppdatera inlägg
+
+### 🤖Chatta med AI
+
+**GET:** `localhost:8080/api/myJournal/suggest-recipe` -- få receptförslag/ råd att må bättre
+
+### 💳Betalningstjänst
+
+**POST** `localhost:8080/api/myJournal/payments/create-checkout-session` -- anropar Stripe API
 
 ## Ex. JSON
-**Create user/ Login**
+**Registrera / Logga in**
 
 `json { "username": "olle", "password": "olle12345" } `
 
-**Create journal entry**
+**Skapa journal inlägg**
 
 `json { 
   "note" : "Felling proud",
    "feeling": "PROUD"
 } `
 
-**Note:** For Better experience use with frontend application! There you could find emojies and grahical representation of statistics.  
+**💡** För bästa upplevelse - använd API:t tillsammans med  **frontendapplicationen**,  där du får emojis och grafisk statistik.  
 
-## Future Development:
-- Endpoint to update username/ password
-- Add Admin role
-- Admin can delete an user account
-
+## 🔮Framtida utvecklingsmöjligheter:
+- Endpoint för att uppdatera användarnamn/ lösenord
+- Administratörroll
+- Möjligheter för admin att radera användarkonton
+- Flera olika abonemang
+- Uppdatera AI delen med olika specefika tjänster t.ex. förslag på fritids aktivititer och mm
