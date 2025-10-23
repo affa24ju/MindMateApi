@@ -193,6 +193,7 @@ public class JournalEntryServiceTest {
     @Test
     void testGetJournalEntriesByDateRange_ShouldReturnEntriesWithinDateRange() {
         // Arrange
+        // Skapar en användare och några journalposter inom datumintervallet
         LocalDateTime startDate = LocalDateTime.now().minusDays(5);
         LocalDateTime endDate = LocalDateTime.now();
 
