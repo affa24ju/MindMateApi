@@ -178,14 +178,54 @@ public class JournalEntryServiceTest {
         JournalEntry result = journalEntryService.updateJournalEntry(entryId, updateRequest, user);
 
         // Assert
-        // 
-        // Verifierar att resultatet inte är null och innehåller rätt uppdaterade värdena
+        //
+        // Verifierar att resultatet inte är null och innehåller rätt uppdaterade
+        // värdena
         assertNotNull(result);
         assertEquals("Uppdaterad anteckning", result.getNote());
         assertEquals(Feeling.TIRED, result.getFeeling());
 
         verify(journalEntryRepository, times(1)).findById(entryId);
         verify(journalEntryRepository, times(1)).save(any(JournalEntry.class));
+    }
+
+    // Test för getJournalEntriesByDateRange-metoden
+    @Test
+    void testGetJournalEntriesByDateRange_ShouldReturnEntriesWithinDateRange() {
+        // Arrange
+        LocalDateTime startDate = LocalDateTime.now().minusDays(5);
+        LocalDateTime endDate = LocalDateTime.now();
+
+        JournalEntry entry1 = JournalEntry.builder()
+                .userId(user.getId())
+                .note("Post inom datumintervall 1")
+                .feeling(Feeling.GLAD)
+                .createdAt(LocalDateTime.now().minusDays(4))
+                .build();
+
+        JournalEntry entry2 = JournalEntry.builder()
+                .userId(user.getId())
+                .note("Post inom datumintervall 2")
+                .feeling(Feeling.SAD)
+                .createdAt(LocalDateTime.now().minusDays(2))
+                .build();
+
+        when(journalEntryRepository.findByUserIdAndCreatedAtBetween(user.getId(), startDate, endDate))
+                .thenReturn(List.of(entry1, entry2));
+
+        // Act
+        List<JournalEntry> result = journalEntryService.getJournalEntriesByDateRange(user, startDate, endDate);
+
+        // Assert
+        // Verifierar att resultatet inte är null, har rätt storlek (2) och innehåller
+        // de förväntade journalposterna.
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Post inom datumintervall 1", result.get(0).getNote());
+        assertEquals("Post inom datumintervall 2", result.get(1).getNote());
+
+        verify(journalEntryRepository, times(1))
+                .findByUserIdAndCreatedAtBetween(user.getId(), startDate, endDate);
     }
 
 }
