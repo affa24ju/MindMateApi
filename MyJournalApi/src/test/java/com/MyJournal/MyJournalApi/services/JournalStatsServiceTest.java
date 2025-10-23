@@ -50,4 +50,20 @@ public class JournalStatsServiceTest {
 
     }
 
+    // Test för getStats-metoden med tom lista
+    @Test
+    void testGetStats_WithEmptyList_ShouldReturnZeroCountsAndPercentages() {
+        // Arrange
+        List<JournalEntry> entries = List.of();
+
+        // Act
+        JournalStatsResponse result = journalStatsService.getStats(entries);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(0, result.getTotalEntries());
+        assertEquals(0, result.getFeelingCounts().size());
+        assertEquals(0, result.getFeelingPercentages().size());
+    }
+
 }
