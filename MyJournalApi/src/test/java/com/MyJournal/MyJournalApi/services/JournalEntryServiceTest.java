@@ -8,13 +8,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,7 +24,7 @@ import com.MyJournal.MyJournalApi.models.JournalEntry;
 import com.MyJournal.MyJournalApi.models.User;
 import com.MyJournal.MyJournalApi.repositories.JournalEntryRepository;
 
-// @SpringBootTest
+// @ExtendWith - Använder MockitoExtension för att möjliggöra Mockito-funktioner i JUnit 5 tester
 @ExtendWith(MockitoExtension.class)
 public class JournalEntryServiceTest {
 
@@ -42,8 +42,7 @@ public class JournalEntryServiceTest {
 
     @BeforeEach
     void setUp() {
-        // MockitoAnnotations.openMocks(this);
-        // Initialize test data
+        // Initierar test data
         user = new User();
         user.setId("testUserId");
 
@@ -52,6 +51,7 @@ public class JournalEntryServiceTest {
         journalEntryRequest.setFeeling(Feeling.GLAD);
     }
 
+    // Test för createJournalEntry-metoden
     @Test
     void testCreateJournalEntry_ShouldSaveAndReturnJournalEntry() {
         // Arrange
@@ -62,6 +62,7 @@ public class JournalEntryServiceTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
+        // Mockar beteendet för journalEntryRepository.save()
         when(journalEntryRepository.save(any(JournalEntry.class)))
                 .thenReturn(savedEntry);
 
@@ -77,6 +78,39 @@ public class JournalEntryServiceTest {
 
         verify(journalEntryRepository, times(1)).save(any(JournalEntry.class));
 
+    }
+
+    // Test för getAllEntries-metoden
+    @Test
+    void testGetAllEntries_ShouldReturnListOfJournalEntriesForUser() {
+        // Arrange
+        JournalEntry entry1 = JournalEntry.builder()
+                .userId(user.getId())
+                .note("Dagbokspost 1")
+                .feeling(Feeling.NEUTRAL)
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        JournalEntry entry2 = JournalEntry.builder()
+                .userId(user.getId())
+                .note("Dagbokspost 2")
+                .feeling(Feeling.GLAD)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        when(journalEntryRepository.findByUserId(user.getId()))
+                .thenReturn(List.of(entry1, entry2));
+
+        // Act
+        List<JournalEntry> result = journalEntryService.getAllEntries(user);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Dagbokspost 1", result.get(0).getNote());
+        assertEquals("Dagbokspost 2", result.get(1).getNote());
+
+        verify(journalEntryRepository, times(1)).findByUserId(user.getId());
     }
 
 }
