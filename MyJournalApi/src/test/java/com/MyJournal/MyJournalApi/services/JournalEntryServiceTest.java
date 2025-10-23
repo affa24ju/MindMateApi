@@ -147,4 +147,43 @@ public class JournalEntryServiceTest {
 
     }
 
+    // Test för updateJournalEntry-metoden
+    @Test
+    void testUpdateJournalEntry_ShouldUpdateAndReturnJournalEntry() {
+        // Arrange
+        String entryId = "updateEntryId";
+        JournalEntry existingEntry = JournalEntry.builder()
+                .userId(user.getId())
+                .note("Gammal anteckning")
+                .feeling(Feeling.NEUTRAL)
+                .createdAt(LocalDateTime.now().minusDays(3))
+                .build();
+
+        // Mockar repository för att returnera den befintliga posten när findById
+        // anropas
+        when(journalEntryRepository.findById(entryId))
+                .thenReturn(Optional.of(existingEntry));
+
+        // Skapar en uppdateringsrequest
+        var updateRequest = new com.MyJournal.MyJournalApi.dtos.JournalEntryUpdateRequest();
+        updateRequest.setNote("Uppdaterad anteckning");
+        updateRequest.setFeeling(Feeling.TIRED);
+
+        // Mockar save-metoden för att returnera den uppdaterade posten
+        when(journalEntryRepository.save(any(JournalEntry.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        JournalEntry result = journalEntryService.updateJournalEntry(entryId, updateRequest, user);
+
+        // Assert
+        // Verifierar att resultatet inte är null och har de uppdaterade värdena
+        assertNotNull(result);
+        assertEquals("Uppdaterad anteckning", result.getNote());
+        assertEquals(Feeling.TIRED, result.getFeeling());
+
+        verify(journalEntryRepository, times(1)).findById(entryId);
+        verify(journalEntryRepository, times(1)).save(any(JournalEntry.class));
+    }
+
 }
