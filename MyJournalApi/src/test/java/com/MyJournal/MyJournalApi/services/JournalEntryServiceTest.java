@@ -71,6 +71,7 @@ public class JournalEntryServiceTest {
         JournalEntry result = journalEntryService.createJournalEntry(user, journalEntryRequest);
 
         // Assert
+        // Verifierar att resultatet inte är null och har rätt värden
         assertNotNull(result);
         assertEquals(user.getId(), result.getUserId());
         assertEquals(journalEntryRequest.getNote(), result.getNote());
@@ -109,6 +110,7 @@ public class JournalEntryServiceTest {
         // Assert
         // Verifierar att resultatet inte är null, har rätt storlek (2) och innehåller
         // de förväntade journalposterna.
+        // 
         // Använder också verify för att säkerställa att repository-metoden anropades exakt en gång med rätt användar-ID.
         assertNotNull(result);
         assertEquals(2, result.size());
