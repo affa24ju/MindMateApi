@@ -84,6 +84,8 @@ public class JournalEntryServiceTest {
     @Test
     void testGetAllEntries_ShouldReturnListOfJournalEntriesForUser() {
         // Arrange
+        // Skapar några dummy journalposter för användaren
+        // Ska returnera dessa när repository anropas
         JournalEntry entry1 = JournalEntry.builder()
                 .userId(user.getId())
                 .note("Dagbokspost 1")
@@ -105,6 +107,9 @@ public class JournalEntryServiceTest {
         List<JournalEntry> result = journalEntryService.getAllEntries(user);
 
         // Assert
+        // Verifierar att resultatet inte är null, har rätt storlek (2) och innehåller
+        // de förväntade journalposterna.
+        // Använder också verify för att säkerställa att repository-metoden anropades exakt en gång med rätt användar-ID.
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("Dagbokspost 1", result.get(0).getNote());
