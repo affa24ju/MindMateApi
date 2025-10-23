@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-//import org.springframework.boot.test.context.SpringBootTest;
 
 import com.MyJournal.MyJournalApi.dtos.JournalEntryRequest;
 import com.MyJournal.MyJournalApi.models.Feeling;
@@ -123,11 +123,28 @@ public class JournalEntryServiceTest {
 
     // Test för deleteJournalEntry-metoden
     @Test
-    void testDeleteJournalEntry_ShouldDeleteEntryWhenAuthorized() { 
-        
+    void testDeleteJournalEntry_ShouldDeleteEntryWhenAuthorized() {
+        // Arrange
+        String entryId = "testEntryId";
+        JournalEntry existingEntry = JournalEntry.builder()
+                .userId(user.getId())
+                .note("Att ta bort denna post")
+                .feeling(Feeling.SAD)
+                .createdAt(LocalDateTime.now().minusDays(2))
+                .build();
+
+        // Mockar repository för att returnera den befintliga posten när findById
+        // anropas
+        when(journalEntryRepository.findById(entryId))
+                .thenReturn(Optional.of(existingEntry));
+
+        // Act
+        journalEntryService.deleteJournalEntry(entryId, user);
+
+        // Assert
+        // Verifierar att deleteById anropades exakt en gång med rätt entryId
+        verify(journalEntryRepository, times(1)).deleteById(entryId);
+
     }
-
-
-
 
 }
