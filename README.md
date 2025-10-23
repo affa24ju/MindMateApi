@@ -41,6 +41,7 @@ API:t är byggt med:
 - **Spring AI-OpenAI API**
 - **MongoDB-databas**
 - **Stripe**
+- **Junit**
 
 ## 🖥️Frontend-integration
 Frontend applikation finns seperat här:
@@ -136,6 +137,18 @@ För att fråga AI:n:
 ### 💳Betalningstjänst
 
 **POST** `localhost:8080/api/myJournal/payments/create-checkout-session` -- anropar Stripe API
+
+## 🧪Testning
+Projektet innehåller enhetstester för **service-lagret** skrivna med **JUnit 5** och **Mockito**.
+
+Tester finns för alla metoder i:
+
+- `JournalEntryService`
+- `JournalStatsService`
+
+Syftet är att säkerställa att logiken för att skapa, hämta, uppdatera och ta bort journalinlägg fungerar som förväntat, oberoende av controller- eller databasanrop.
+
+Mockade beroendn används för att isolera testlogiken och verifera metodanrop till repository-lagret. 
 
 ## Ex. JSON
 **Registrera / Logga in**
