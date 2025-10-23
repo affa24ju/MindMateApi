@@ -110,8 +110,9 @@ public class JournalEntryServiceTest {
         // Assert
         // Verifierar att resultatet inte är null, har rätt storlek (2) och innehåller
         // de förväntade journalposterna.
-        // 
-        // Använder också verify för att säkerställa att repository-metoden anropades exakt en gång med rätt användar-ID.
+        //
+        // Använder också verify för att säkerställa att repository-metoden anropades
+        // exakt en gång med rätt användar-ID.
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("Dagbokspost 1", result.get(0).getNote());
@@ -119,5 +120,14 @@ public class JournalEntryServiceTest {
 
         verify(journalEntryRepository, times(1)).findByUserId(user.getId());
     }
+
+    // Test för deleteJournalEntry-metoden
+    @Test
+    void testDeleteJournalEntry_ShouldDeleteEntryWhenAuthorized() { 
+        
+    }
+
+
+
 
 }
