@@ -151,6 +151,7 @@ public class JournalEntryServiceTest {
     @Test
     void testUpdateJournalEntry_ShouldUpdateAndReturnJournalEntry() {
         // Arrange
+        // Skapar en användare och en befintlig journalpost
         String entryId = "updateEntryId";
         JournalEntry existingEntry = JournalEntry.builder()
                 .userId(user.getId())
@@ -177,7 +178,8 @@ public class JournalEntryServiceTest {
         JournalEntry result = journalEntryService.updateJournalEntry(entryId, updateRequest, user);
 
         // Assert
-        // Verifierar att resultatet inte är null och har de uppdaterade värdena
+        // 
+        // Verifierar att resultatet inte är null och innehåller rätt uppdaterade värdena
         assertNotNull(result);
         assertEquals("Uppdaterad anteckning", result.getNote());
         assertEquals(Feeling.TIRED, result.getFeeling());
