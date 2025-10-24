@@ -13,6 +13,7 @@ import com.MyJournal.MyJournalApi.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
+import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,28 @@ public class StripeWebhookController {
             return ResponseEntity.badRequest().body("Invalid signature");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error parsing webhook event");
+        }
+
+        // Hanterar checkout.session.completed event
+        if ("checkout.session.completed".equals(event.getType())) {
+            // Session från Stripe.checkout; Hämtar session objektet från eventet
+            Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+
+            if (session != null) {
+                // Kontrollerar faktiska betalningstatus, inte bara skapandet av sessionen
+                // t.ex. session.getPaymentStatus() är "paid" om betalningen lyckades
+                String paymentStatus = session.getPaymentStatus();
+                // Hämtar användar-ID från metadata, satte det när checkout session skapades i
+                // PaymentController
+                String userId = session.getMetadata() != null ? session.getMetadata().get("userId") : null;
+
+                if (userId != null && "paid".equals(paymentStatus)) {
+                    // Uppdaterar användarens premium-status
+                    userService.setPremium(userId, true);
+                }
+
+            }
+
         }
         // Svarar med 200 OK för att stripe vet att jag mottagit eventet
         return ResponseEntity.ok("Webhook received");

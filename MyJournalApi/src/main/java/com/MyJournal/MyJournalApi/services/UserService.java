@@ -17,4 +17,9 @@ public class UserService {
         return (User) auth.getPrincipal();
     }
 
+    public void setPremium(String userId, boolean b) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPremium'");
+    }
+
 }
