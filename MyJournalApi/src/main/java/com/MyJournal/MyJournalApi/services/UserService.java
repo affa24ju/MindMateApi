@@ -5,9 +5,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.MyJournal.MyJournalApi.models.User;
+import com.MyJournal.MyJournalApi.repositories.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
+
+    private final UserRepository userRepository;
 
     // Metod för att hämta den aktuella inloggade användaren
     public User getCurrentUser() {
@@ -18,8 +24,11 @@ public class UserService {
     }
 
     public void setPremium(String userId, boolean b) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPremium'");
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setPremium(b);
+            userRepository.save(user);
+        });
+
     }
 
 }
