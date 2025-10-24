@@ -28,7 +28,6 @@ public class StripeWebhookController {
     private String endpointSecret;
 
     private final UserService userService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleStripeWebhook(@RequestBody String payload,
