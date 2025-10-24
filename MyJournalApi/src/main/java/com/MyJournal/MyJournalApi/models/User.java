@@ -24,6 +24,11 @@ public class User implements UserDetails {
     private String username;
     private String password;
 
+    // Nytt fält för premium-status, standard är false
+    // Nya användare automatiskt icke-premium, påverkar inte befintliga användare
+    @Builder.Default
+    private boolean premium = false;
+
     @Override
     public String getUsername() {
         return this.username;
@@ -54,6 +59,11 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    // Metod för att ändra premium-status
+    public void setPremium(boolean premium) {
+        this.premium = premium;
     }
 
 }
