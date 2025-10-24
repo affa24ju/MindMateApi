@@ -32,7 +32,7 @@ public class PaymentController {
 
         @PostMapping("/create-checkout-session")
         public ResponseEntity<Map<String, String>> createCheckoutSession() throws StripeException {
-                // Sätt Stripe API-nyckeln
+                // Sätter Stripe API-nyckeln
                 Stripe.apiKey = stripeSecretKey;
 
                 User currentUser = userService.getCurrentUser();
@@ -64,7 +64,7 @@ public class PaymentController {
 
                 Session session = Session.create(params);
 
-                return ResponseEntity.ok(Map.of("url", session.getId()));
+                return ResponseEntity.ok(Map.of("url", session.getUrl()));
         }
 
 }
