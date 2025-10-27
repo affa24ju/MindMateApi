@@ -30,18 +30,21 @@ public class StripeWebhookController {
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleStripeWebhook(@RequestBody String payload,
-            @RequestHeader("Stripe-Signature") String sigHeader) {
+            @RequestHeader(value = "Stripe-Signature", required = false) String sigHeader) {
         // Event från Stripe
         Event event;
         try {
             event = Webhook.constructEvent(
                     payload, sigHeader, endpointSecret);
         } catch (SignatureVerificationException e) {
+            System.out.println("⚠️  Ogiltigt Stripe signature: " + e.getMessage());
             // Signaturen är ogiltig
             return ResponseEntity.badRequest().body("Invalid signature");
         } catch (Exception e) {
+            System.out.println("⚠️  Fel vid webhook event parsing: " + e.getMessage());
             return ResponseEntity.badRequest().body("Error parsing webhook event");
         }
+        System.out.println("✅  Mottog enent från Stripe: " + event.getType());
 
         // Hanterar checkout.session.completed event
         if ("checkout.session.completed".equals(event.getType())) {
@@ -51,16 +54,21 @@ public class StripeWebhookController {
             if (session != null) {
                 // Kontrollerar faktiska betalningstatus, inte bara skapandet av sessionen
                 // t.ex. session.getPaymentStatus() är "paid" om betalningen lyckades
-                String paymentStatus = session.getPaymentStatus();
+                // String paymentStatus = session.getPaymentStatus();
                 // Hämtar användar-ID från metadata, satte det när checkout session skapades i
                 // PaymentController
                 String userId = session.getMetadata() != null ? session.getMetadata().get("userId") : null;
 
-                if (userId != null && "paid".equals(paymentStatus)) {
+                if (userId != null) {
                     // Uppdaterar användarens premium-status
                     userService.setPremium(userId, true);
+                    System.out.println("User med " + userId + " upgraded to premium.");
+                } else {
+                    System.out.println("Ingen userId i metadata.");
                 }
 
+            } else {
+                System.out.println("Kunde inte läsa session objektet från webhook eventet.");
             }
 
         }
