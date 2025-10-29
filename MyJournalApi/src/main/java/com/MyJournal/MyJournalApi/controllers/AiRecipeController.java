@@ -54,10 +54,21 @@ public class AiRecipeController {
     @GetMapping("/suggest-recipe")
     public String suggestRecipe(
             @RequestParam(name = "message", defaultValue = "Ge mig ett hälsosamt recept till middag") String message) {
-
-        // Hämtar inloggade användare via UserService
-        User currentUser = userService.getCurrentUser();
-        String username = currentUser.getUsername();
+        /*
+         * // Hämtar inloggade användare via UserService
+         * User currentUser = userService.getCurrentUser();
+         * String username = currentUser.getUsername();
+         */
+        String username = "Gäst";
+        try {
+            User currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                username = currentUser.getUsername();
+            }
+        } catch (Exception e) {
+            // Om användaren inte är inloggad, använd "Gäst"
+            System.out.println("Ingen inloggad användare, fortsätter som 'Gäst'");
+        }
 
         // Skapar användarens fråga till Ai
         String userPrompt = String.format("Användaren %s frågar: %s", username, message);
