@@ -41,6 +41,7 @@ API:t är byggt med:
 - **Spring AI-OpenAI API**
 - **MongoDB-databas**
 - **Stripe**
+- **Stripe webhook**
 - **Junit**
 
 ## 🖥️Frontend-integration
@@ -76,6 +77,8 @@ Skapa en .env fil med:
 OPEN_AI_API_KEY="yourOpenAiApiKey"
 
 STRIPE_SECRET_KEY="yourStripeSecretKey"
+
+STRIPE_WEBHOOK_SECRET="yourWebhookSecretKey"
 ```
 
 Spara filen.
