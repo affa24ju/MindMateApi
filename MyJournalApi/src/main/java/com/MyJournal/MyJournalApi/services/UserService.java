@@ -20,6 +20,10 @@ public class UserService {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+
         return (User) auth.getPrincipal();
     }
 
