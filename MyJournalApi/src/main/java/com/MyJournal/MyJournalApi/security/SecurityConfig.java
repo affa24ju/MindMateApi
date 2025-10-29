@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/myJournal/payments/webhook").permitAll()
-                        .requestMatchers("/api/myJournal/suggest-recipe").permitAll()
+                        .requestMatchers("/api/myJournal/suggest-recipe", "/api/myJournal/suggest-recipe/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
