@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/myJournal/payments")
-@CrossOrigin(origins = "http://localhost:4200") // Allow requests from Angular dev server
+@CrossOrigin(origins = { "https://mindmatefrontend.onrender.com", "http://localhost:4200" })
 @RequiredArgsConstructor
 public class StripeWebhookController {
 

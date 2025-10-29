@@ -18,8 +18,9 @@ import com.MyJournal.MyJournalApi.models.User;
 import com.MyJournal.MyJournalApi.services.UserService;
 
 // import lombok.RequiredArgsConstructor;
-
-@CrossOrigin(origins = "http://localhost:4200") // Allow requests from Angular dev server
+// Frontend URL: https://mindmatefrontend.onrender.com
+@CrossOrigin(origins = { "https://mindmatefrontend.onrender.com", "http://localhost:4200" }) // Allow requests from
+                                                                                             // Angular dev server
 @RestController
 @RequestMapping("/api/myJournal")
 // @RequiredArgsConstructor
