@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/myJournal/payments")
-@CrossOrigin(origins = "http://localhost:4200") // Allow requests from Angular dev server
+@CrossOrigin(origins = { "https://mindmatefrontend.onrender.com", "http://localhost:4200" })
 @RequiredArgsConstructor
 public class PaymentController {
 
@@ -40,8 +40,8 @@ public class PaymentController {
                 // Skapa en ny checkout session
                 SessionCreateParams params = SessionCreateParams.builder()
                                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                                .setSuccessUrl("http://localhost:4200/premium-success?session_id={CHECKOUT_SESSION_ID}")
-                                .setCancelUrl("http://localhost:4200/payment-cancel")
+                                .setSuccessUrl("https://mindmatefrontend.onrender.com/premium-success")
+                                .setCancelUrl("https://mindmatefrontend.onrender.com/payment-cancel")
                                 .addLineItem(
                                                 SessionCreateParams.LineItem.builder()
                                                                 .setQuantity(1L)

@@ -18,8 +18,9 @@ import com.MyJournal.MyJournalApi.models.User;
 import com.MyJournal.MyJournalApi.services.UserService;
 
 // import lombok.RequiredArgsConstructor;
-
-@CrossOrigin(origins = "http://localhost:4200") // Allow requests from Angular dev server
+// Frontend URL: https://mindmatefrontend.onrender.com
+@CrossOrigin(origins = { "https://mindmatefrontend.onrender.com", "http://localhost:4200" }) // Allow requests from
+                                                                                             // Angular dev server
 @RestController
 @RequestMapping("/api/myJournal")
 // @RequiredArgsConstructor
@@ -53,10 +54,21 @@ public class AiRecipeController {
     @GetMapping("/suggest-recipe")
     public String suggestRecipe(
             @RequestParam(name = "message", defaultValue = "Ge mig ett hälsosamt recept till middag") String message) {
-
-        // Hämtar inloggade användare via UserService
-        User currentUser = userService.getCurrentUser();
-        String username = currentUser.getUsername();
+        /*
+         * // Hämtar inloggade användare via UserService
+         * User currentUser = userService.getCurrentUser();
+         * String username = currentUser.getUsername();
+         */
+        String username = "Gäst";
+        try {
+            User currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                username = currentUser.getUsername();
+            }
+        } catch (Exception e) {
+            // Om användaren inte är inloggad, använd "Gäst"
+            System.out.println("Ingen inloggad användare, fortsätter som 'Gäst'");
+        }
 
         // Skapar användarens fråga till Ai
         String userPrompt = String.format("Användaren %s frågar: %s", username, message);
